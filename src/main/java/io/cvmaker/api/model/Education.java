@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -13,10 +12,10 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Education {
-    String institution;
-    String degree;
-    List<String> achievements;
-    String Location;
-    int startYear;
-    int endYear;
+    private String institution;
+    private String degree;
+    private List<String> achievements;
+    private String Location;
+    private int startYear;
+    private int endYear;
 }

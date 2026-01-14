@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -13,11 +12,11 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Experience {
-    String company;
-    String position;
-    String Location;
-    int startYear;
-    int endYear;
-    List<String> achievements;
-    Boolean isCurrent;
+    private String company;
+    private String position;
+    private String Location;
+    private int startYear;
+    private int endYear;
+    private List<String> achievements;
+    private Boolean isCurrent;
 }
