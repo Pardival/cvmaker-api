@@ -17,6 +17,6 @@ public class Education {
     String degree;
     List<String> achievements;
     String Location;
-    LocalDate startYear;
-    LocalDate endYear;
+    int startYear;
+    int endYear;
 }
