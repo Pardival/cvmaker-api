@@ -22,8 +22,8 @@ public class CV {
     private String summary;
 
     private PersonalDetails personalDetails;
-    private List<Education> education;
-    private List<Experience> experience;
+    private List<Education> educations;
+    private List<Experience> experiences;
     private List<Skill> skills;
     private List<Language> languages;
 }
