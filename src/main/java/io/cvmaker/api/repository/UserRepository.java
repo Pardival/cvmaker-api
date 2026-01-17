@@ -8,6 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
-    Optional<String> findByGoogleId(String googleId);
-    Optional<String> findByEmail(String email);
+    Optional<User> findByGoogleId(String googleId);
+    Optional<User> findByEmail(String email);
 }

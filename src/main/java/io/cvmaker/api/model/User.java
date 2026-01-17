@@ -26,6 +26,7 @@ public class User {
     private String googleId;
     private String phoneNumber;
     private String profilePictureUrl;
+    private String role;
     private LocalDateTime createdAt;
     private LocalDateTime lastLogin;
 
