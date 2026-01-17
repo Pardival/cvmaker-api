@@ -18,7 +18,7 @@ public class CVController {
     }
 
     @GetMapping()
-    public List<CV> findByUserId(@AuthenticationPrincipal Jwt jwt) {
+    public List<CV> findCVByUserId(@AuthenticationPrincipal Jwt jwt) {
         return cvService.findByUserId(jwt.getSubject());
     }
 
