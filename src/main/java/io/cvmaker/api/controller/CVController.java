@@ -14,7 +14,7 @@ public class CVController {
     private static CVService cvService;
 
     public CVController(CVService cvService) {
-        cvService = cvService;
+        CVController.cvService = cvService;
     }
 
     @GetMapping()
@@ -22,9 +22,8 @@ public class CVController {
         return cvService.findByUserId(jwt.getSubject());
     }
 
-    @PostMapping("/create")
+    @PostMapping()
     public CV saveCV(@AuthenticationPrincipal Jwt jwt, @RequestBody CV cv) {
-        String googleId = jwt.getSubject();
-        return cvService.saveCV(cv, googleId);
+        return cvService.saveCV(cv, jwt);
     }
 }
