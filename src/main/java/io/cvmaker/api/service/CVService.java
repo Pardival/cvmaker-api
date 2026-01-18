@@ -1,5 +1,7 @@
 package io.cvmaker.api.service;
 
+import io.cvmaker.api.exception.RessourceNotFoundException;
+import io.cvmaker.api.exception.UnauthorizedAccessException;
 import io.cvmaker.api.model.CV;
 import io.cvmaker.api.repository.CVRepository;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -29,10 +31,10 @@ public class CVService {
 
     public CV updateCV(String userId, String cvId, CV toUpdate ) {
         CV cv = cvRepository.findById(cvId)
-                .orElseThrow(() -> new RuntimeException("CV non trouvé : " + cvId));
+                .orElseThrow(() -> new RessourceNotFoundException("CV non trouvé : " + cvId));
 
         if (!cv.getUserId().equals(userId)) {
-            throw new RuntimeException("L'utilisateur n'est pas autorisé à modifier ce CV : " + cvId);
+            throw new UnauthorizedAccessException("L'utilisateur n'est pas autorisé à modifier ce CV : " + cvId);
         }
 
         toUpdate.setId(cvId);
@@ -42,10 +44,10 @@ public class CVService {
 
     public void deleteCV(String userId, String cvId) {
         CV toDelete = cvRepository.findById(cvId)
-                .orElseThrow(() -> new RuntimeException("CV non trouvé : " + cvId));
+                .orElseThrow(() -> new RessourceNotFoundException("CV non trouvé : " + cvId));
 
         if (!toDelete.getUserId().equals(userId)) {
-            throw new RuntimeException("L'utilisateur n'est pas autorisé à supprimer ce CV : " + cvId);
+            throw new UnauthorizedAccessException("L'utilisateur n'est pas autorisé à supprimer ce CV : " + cvId);
         }
         cvRepository.deleteById(cvId);
     }
