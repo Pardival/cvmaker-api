@@ -6,24 +6,47 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CVService {
-    private static CVRepository cvRepository;
-    private static UserService userService;
+    private final CVRepository cvRepository;
+    private final UserService userService;
 
     public CVService(CVRepository cvRepository, UserService userService) {
-        CVService.cvRepository = cvRepository;
-        CVService.userService = userService;
-    }
-
-    public CV saveCV(CV cv, Jwt jwt) {
-        userService.syncUser(jwt);
-        cv.setUserId(jwt.getSubject());
-        return cvRepository.save(cv);
+        this.cvRepository = cvRepository;
+        this.userService = userService;
     }
 
     public List<CV> findByUserId(String userId) {
         return cvRepository.findByUserId(userId);
+    }
+
+    public CV saveCV(CV cv, String userId) {
+        cv.setUserId(userId);
+        return cvRepository.save(cv);
+    }
+
+    public CV updateCV(String userId, String cvId, CV toUpdate ) {
+        CV cv = cvRepository.findById(cvId)
+                .orElseThrow(() -> new RuntimeException("CV non trouvé : " + cvId));
+
+        if (!cv.getUserId().equals(userId)) {
+            throw new RuntimeException("L'utilisateur n'est pas autorisé à modifier ce CV : " + cvId);
+        }
+
+        toUpdate.setId(cvId);
+        toUpdate.setUserId(userId);
+        return cvRepository.save(toUpdate);
+    }
+
+    public void deleteCV(String userId, String cvId) {
+        CV toDelete = cvRepository.findById(cvId)
+                .orElseThrow(() -> new RuntimeException("CV non trouvé : " + cvId));
+
+        if (!toDelete.getUserId().equals(userId)) {
+            throw new RuntimeException("L'utilisateur n'est pas autorisé à supprimer ce CV : " + cvId);
+        }
+        cvRepository.deleteById(cvId);
     }
 }

@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface CVRepository extends MongoRepository<CV, String> {
     List<CV> findByUserId(String userId);
+    void deleteById(String id);
 }
