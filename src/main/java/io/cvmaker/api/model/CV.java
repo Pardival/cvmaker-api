@@ -1,6 +1,5 @@
 package io.cvmaker.api.model;
 
-import io.cvmaker.api.dto.request.PersonalDetailsRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +21,7 @@ public class CV {
     private String cvName;
     private String summary;
 
-    private PersonalDetailsRequest personalDetails;
+    private PersonalDetails personalDetails;
     private List<Education> educations;
     private List<Experience> experiences;
     private List<Skill> skills;

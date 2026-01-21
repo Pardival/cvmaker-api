@@ -8,7 +8,7 @@ public class CVRequest {
     private String cvName;
     private String summary;
 
-    private PersonalDetails personalDetails;
+    private PersonalDetailsRequest personalDetails;
     private List<EducationRequest> educations;
     private List<ExperienceRequest> experiences;
     private List<SkillRequest> skills;
