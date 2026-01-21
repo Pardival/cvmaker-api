@@ -6,7 +6,6 @@ import java.util.List;
 
 public class CVResponse {
     private String id;
-    private String userId;
     private String cvName;
     private String summary;
 
