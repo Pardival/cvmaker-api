@@ -9,7 +9,7 @@ public class CVResponse {
     private String cvName;
     private String summary;
 
-    private PersonalDetails personalDetails;
+    private PersonalDetailsResponse personalDetails;
     private List<EducationResponse> educations;
     private List<ExperienceResponse> experiences;
     private List<SkillResponse> skills;
