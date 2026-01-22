@@ -22,7 +22,8 @@ public class CVService {
     }
 
     public List<CV> findByUserId(String userId) {
-        return cvRepository.findByUserId(userId);
+        User user = userService.findByGoogleId(userId);
+        return cvRepository.findByUserId(user.getId());
     }
 
     public CV saveCV(CV cv, String userId) {
@@ -40,7 +41,7 @@ public class CVService {
         }
 
         toUpdate.setId(cvId);
-        toUpdate.setUserId(user.getId());
+        toUpdate.setId(user.getId());
         return cvRepository.save(toUpdate);
     }
 

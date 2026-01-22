@@ -19,6 +19,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // API stateless
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/api/public/**").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2
