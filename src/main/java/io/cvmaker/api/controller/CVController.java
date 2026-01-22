@@ -40,8 +40,8 @@ public class CVController {
     }
 
     @PutMapping("/{id}")
-    public CVResponse updateCV(@AuthenticationPrincipal Jwt jwt, @PathVariable String id, @RequestBody CV request) {
-        return cvMapper.toResponse(cvService.updateCV(jwt.getSubject(), id, request));
+    public CVResponse updateCV(@AuthenticationPrincipal Jwt jwt, @PathVariable String id, @RequestBody CVRequest request) {
+        return cvMapper.toResponse(cvService.updateCV(jwt.getSubject(), id, cvMapper.toEntity(request)));
     }
 
     @DeleteMapping("/{id}")

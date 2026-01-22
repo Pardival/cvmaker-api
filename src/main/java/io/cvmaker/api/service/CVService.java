@@ -40,7 +40,7 @@ public class CVService {
         }
 
         toUpdate.setId(cvId);
-        toUpdate.setUserId(userId);
+        toUpdate.setUserId(user.getId());
         return cvRepository.save(toUpdate);
     }
 
