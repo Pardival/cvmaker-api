@@ -1,5 +1,6 @@
 package io.cvmaker.api.service;
 
+import io.cvmaker.api.exception.RessourceNotFoundException;
 import io.cvmaker.api.model.User;
 import io.cvmaker.api.repository.UserRepository;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -13,6 +14,11 @@ public class UserService {
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    public User findByGoogleId(String googleId) {
+        return userRepository.findByGoogleId(googleId)
+                .orElseThrow(() -> new RessourceNotFoundException("User not found with googleId: " + googleId));
     }
 
     public User syncUser(Jwt jwt) {

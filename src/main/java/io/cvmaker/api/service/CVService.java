@@ -3,6 +3,7 @@ package io.cvmaker.api.service;
 import io.cvmaker.api.exception.RessourceNotFoundException;
 import io.cvmaker.api.exception.UnauthorizedAccessException;
 import io.cvmaker.api.model.CV;
+import io.cvmaker.api.model.User;
 import io.cvmaker.api.repository.CVRepository;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -30,10 +31,11 @@ public class CVService {
     }
 
     public CV updateCV(String userId, String cvId, CV toUpdate ) {
+        User user = userService.findByGoogleId(userId);
         CV cv = cvRepository.findById(cvId)
                 .orElseThrow(() -> new RessourceNotFoundException("CV non trouvé : " + cvId));
 
-        if (!cv.getUserId().equals(userId)) {
+        if (!cv.getUserId().equals(user.getId())) {
             throw new UnauthorizedAccessException("L'utilisateur n'est pas autorisé à modifier ce CV : " + cvId);
         }
 
