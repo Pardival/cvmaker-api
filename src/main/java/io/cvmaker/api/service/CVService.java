@@ -21,8 +21,8 @@ public class CVService {
         this.userService = userService;
     }
 
-    public List<CV> findByUserId(String userId) {
-        User user = userService.findByGoogleId(userId);
+    public List<CV> findByUserId(String googleId) {
+        User user = userService.findByGoogleId(googleId);
         return cvRepository.findByUserId(user.getId());
     }
 
@@ -45,11 +45,12 @@ public class CVService {
         return cvRepository.save(toUpdate);
     }
 
-    public void deleteCV(String userId, String cvId) {
+    public void deleteCV(String googleId, String cvId) {
+        User user = userService.findByGoogleId(googleId);
         CV toDelete = cvRepository.findById(cvId)
                 .orElseThrow(() -> new RessourceNotFoundException("CV non trouvé : " + cvId));
 
-        if (!toDelete.getUserId().equals(userId)) {
+        if (!toDelete.getUserId().equals(user.getId())) {
             throw new UnauthorizedAccessException("L'utilisateur n'est pas autorisé à supprimer ce CV : " + cvId);
         }
         cvRepository.deleteById(cvId);
