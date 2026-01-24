@@ -54,10 +54,28 @@ public class CVServiceTest {
         assertThat(newCV.getCvName()).isEqualTo(cv.getCvName());
     }
 
-    //@Test
-    //public void should_update_cv() {
+    @Test
+    public void should_update_cv_successfully() {
+        // GIVEN
+        String cvId = "cv-123";
+        String googleId = "google-abc";
 
-    //}
+        User user = User.builder().id("user-internal-id").googleId(googleId).build();
+        CV existingCv = CV.builder().id(cvId).userId("user-internal-id").cvName("Ancien Nom").build();
+        CV updatedDetails = CV.builder().id(cvId).userId("user-internal-id").cvName("Nouveau Nom").build();
+
+        when(cvRepository.findById(cvId)).thenReturn(Optional.of(existingCv));
+        when(userService.findByGoogleId(googleId)).thenReturn(user);
+        when(cvRepository.save(any(CV.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        // WHEN
+        CV result = cvService.updateCV(googleId, cvId, updatedDetails);
+
+        // THEN
+        assertThat(result.getCvName()).isEqualTo("Nouveau Nom");
+        assertThat(result.getUserId()).isEqualTo("user-internal-id"); // Sécurité : l'ID proprio n'a pas bougé
+        verify(cvRepository).save(any(CV.class));
+    }
 
     @Test
     public void should_throw_exception_when_cv_not_found_when_updating() {
@@ -129,5 +147,4 @@ public class CVServiceTest {
         // WHEN & THEN
         assertThrows(UnauthorizedAccessException.class, () -> cvService.deleteCV(googleId, id));
     }
-
 }
