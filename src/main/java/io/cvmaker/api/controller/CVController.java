@@ -8,7 +8,7 @@ import io.cvmaker.api.model.PersonalDetails;
 import io.cvmaker.api.model.User;
 import io.cvmaker.api.service.CVService;
 import io.cvmaker.api.service.UserService;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.ui.Model;
@@ -174,13 +174,27 @@ public class CVController {
                 "Formation en développement web et technologies Cloud"
         ));
         edus.add(edu3);
-
-
         mockCv.setEducations(edus);
 
         // On injecte le tout dans la variable "cv" que le template attend
         context.setVariable("cv", mockCv);
 
         return templateEngine.process("french-resume-ats", context);
+    }
+
+    @GetMapping("/{id}/download")
+    public ResponseEntity<byte[]> downloadCv(@AuthenticationPrincipal Jwt jwt, @PathVariable String id) {
+        byte[] pdfContents = cvService.generateCvPdf(jwt.getSubject(), id);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+
+        // Nom du fichier qui apparaîtra lors du téléchargement
+        String filename = "CV_Export.pdf";
+        headers.setContentDisposition(ContentDisposition.attachment()
+                .filename(filename)
+                .build());
+
+        return new ResponseEntity<>(pdfContents, headers, HttpStatus.OK);
     }
 }
