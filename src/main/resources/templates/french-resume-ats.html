@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${cv.cvName}">Mon CV</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @page { size: A4; margin: 0; }
+        body { font-family: 'Inter', sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .print-color-force { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    </style>
+</head>
+<body class="bg-gray-100 print:bg-white text-gray-800 text-[13px]"> <div class="max-w-[210mm] mx-auto min-h-[297mm] bg-white shadow-lg print:shadow-none print:w-full overflow-hidden flex flex-col">
+
+    <header class="bg-slate-900 text-white p-6 px-10 print-color-force">
+        <div class="flex justify-between items-center"> <div>
+            <h1 class="text-3xl font-bold uppercase tracking-wider leading-tight">
+                <span th:text="${cv.personalDetails.firstName}">Prénom</span>
+                <span th:text="${cv.personalDetails.lastName}" class="text-blue-400">Nom</span>
+            </h1>
+            <h2 class="text-lg font-medium mt-1 text-slate-300 tracking-wide"
+                th:text="${cv.personalDetails.currentJobTitle}">Poste Actuel</h2>
+        </div>
+
+            <div class="text-right text-xs text-slate-300 space-y-0.5 font-light">
+                <p th:text="${cv.personalDetails.city} + ', ' + ${cv.personalDetails.country}">Ville, Pays</p>
+                <p th:text="${cv.personalDetails.phone}">Téléphone</p>
+                <p th:text="${cv.personalDetails.email}" class="text-blue-400 font-medium">Email</p>
+            </div>
+        </div>
+
+        <div class="mt-4 flex space-x-6 text-xs border-t border-slate-700 pt-4">
+            <a th:if="${cv.personalDetails.linkedInUrl}" th:href="${cv.personalDetails.linkedInUrl}" class="flex items-center text-slate-400 hover:text-white transition group">
+                <span class="w-4 h-4 bg-blue-600 text-white rounded flex items-center justify-center mr-2 text-[10px] font-bold">in</span> LinkedIn
+            </a>
+            <a th:if="${cv.personalDetails.githubUrl}" th:href="${cv.personalDetails.githubUrl}" class="flex items-center text-slate-400 hover:text-white transition group">
+                <span class="w-4 h-4 bg-gray-700 text-white rounded flex items-center justify-center mr-2 text-[10px] font-bold">GH</span> GitHub
+            </a>
+        </div>
+
+        <div class="mt-3">
+            <p class="text-slate-300 italic leading-snug text-xs text-justify" th:text="${cv.summary}">Résumé...</p>
+        </div>
+    </header>
+
+    <div class="flex flex-row flex-1">
+        <main class="w-[65%] p-6 px-8">
+
+            <section class="mb-6">
+                <h3 class="text-sm font-bold uppercase text-slate-800 border-b border-slate-900 pb-1 mb-4 flex items-center tracking-widest">
+                    <span class="bg-slate-900 text-white w-5 h-5 flex items-center justify-center rounded mr-2 text-[10px]">XP</span>
+                    Expériences Professionnelles
+                </h3>
+
+                <div class="space-y-5"> <div th:each="exp : ${cv.experiences}">
+                    <div class="flex justify-between items-start mb-0.5">
+                        <h4 class="font-bold text-sm text-slate-900 leading-tight" th:text="${exp.position}">Poste</h4>
+                        <span class="text-[10px] font-bold text-blue-800 bg-blue-50 px-1.5 py-0.5 rounded whitespace-nowrap border border-blue-100">
+                                <span th:text="${exp.startYear}">2020</span> -
+                                <span th:text="${exp.isCurrent} ? 'Aujourd\'hui' : ${exp.endYear}">2024</span>
+                            </span>
+                    </div>
+
+                    <div class="text-xs mb-1.5 text-slate-600 flex items-center font-medium">
+                        <span class="uppercase tracking-tight mr-1" th:text="${exp.company}">Entreprise</span>
+                        <span th:if="${exp.location}" class="text-slate-400 font-normal">
+                                • <span th:text="${exp.location}">Paris</span>
+                            </span>
+                    </div>
+
+                    <ul class="list-disc list-outside ml-3.5 space-y-0.5 marker:text-blue-500 text-[12px]">
+                        <li th:each="ach : ${exp.achievements}" class="text-gray-600 leading-tight" th:text="${ach}">Réalisation</li>
+                    </ul>
+                </div>
+                </div>
+            </section>
+
+            <section>
+                <h3 class="text-sm font-bold uppercase text-slate-800 border-b border-slate-900 pb-1 mb-4 flex items-center tracking-widest">
+                    <span class="bg-slate-900 text-white w-5 h-5 flex items-center justify-center rounded mr-2 text-[10px]">ED</span>
+                    Formations
+                </h3>
+
+                <div class="space-y-4">
+                    <div th:each="edu : ${cv.educations}">
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-bold text-slate-900 text-[13px] leading-tight" th:text="${edu.degree}">Diplôme</h4>
+                            <span class="text-[10px] text-gray-500 font-medium uppercase" th:text="${edu.startYear} + ' - ' + ${edu.endYear}">Dates</span>
+                        </div>
+                        <div class="text-xs text-blue-700 font-semibold" th:text="${edu.institution}">École</div>
+                        <ul class="list-none mt-1 space-y-0.5" th:if="${edu.achievements != null && !edu.achievements.isEmpty()}">
+                            <li th:each="ach : ${edu.achievements}" class="text-[11px] text-gray-500 italic leading-tight" th:text="${ach}">Détail</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <aside class="w-[35%] bg-slate-50 p-6 border-l border-slate-200 print-color-force">
+            <div class="mb-8">
+                <h3 class="text-[11px] font-bold uppercase text-slate-500 mb-4 tracking-widest border-b border-slate-200 pb-1">Compétences</h3>
+                <div class="flex flex-col space-y-3">
+                    <div th:each="skill : ${cv.skills}">
+                        <div class="flex justify-between items-end mb-1">
+                            <span class="font-semibold text-xs text-slate-800" th:text="${skill.name}">Java</span>
+                            <span class="text-[9px] text-blue-600 font-bold uppercase" th:text="${skill.category}">Expert</span>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-1 print-color-force">
+                            <div class="bg-blue-600 h-1 rounded-full print-color-force"
+                                 th:style="'width: ' + (${skill.category == 'Expert' ? '100' : (skill.category == 'Avancé' ? '75' : '50')}) + '%'"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-[11px] font-bold uppercase text-slate-500 mb-4 tracking-widest border-b border-slate-200 pb-1">Langues</h3>
+                <ul class="space-y-2.5">
+                    <li th:each="lang : ${cv.languages}" class="flex justify-between items-center">
+                        <span class="font-bold text-slate-800 text-xs" th:text="${lang.language}">Anglais</span>
+                        <span class="text-[10px] text-slate-500 font-medium" th:text="${lang.level}">Courant</span>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+</div>
+</body>
+</html>
